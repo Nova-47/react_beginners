@@ -8,113 +8,31 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script type="text/babel">
     const root = document.getElementById("root");
+    function Btn({ text, onClick }) {
+      return (
+        <button
+          onClick={onClick}
+          style={{
+            backgroundColor: "tomato",
+            color: "white",
+            padding: "10px 20px",
+            border: 0,
+            borderRadius: 10,
+          }}
+        >
+          {text}
+        </button>
+      );
+    }
+    const MemorizedBtn = React.memo(Btn);
 
-    function MinutesToHours() {
-      const [amount, setAmount] = React.useState(0);
-      const [inverted, setInverted] = React.useState(false);
-      const onChange = (event) => {
-        setAmount(event.target.value);
-      };
-      const reset = () => setAmount(0);
-      const onFlip = () => {
-        reset();
-        setInverted((current) => !current);
-      };
-      return (
-        <div>
-          <div>
-            <label htmlFor="minutes">Minutes</label>
-            <input
-              value={inverted ? amount * 60 : amount}
-              id="minutes"
-              placeholder="Minutes"
-              type="number"
-              onChange={onChange}
-              disabled={inverted}
-            />
-          </div>
-          <h4>
-            {inverted
-              ? `${amount} Hours to Minutes ↑`
-              : `${amount} Minutes to Hours ↓`}
-          </h4>
-          <div>
-            <label htmlFor="hours">Hours</label>
-            <input
-              value={inverted ? amount : (amount / 60).toFixed(2)}
-              id="hours"
-              placeholder="Hours"
-              type="number"
-              onChange={onChange}
-              disabled={!inverted}
-            />
-          </div>
-          <button onClick={reset}>Reset</button>
-          <button onClick={onFlip}>{inverted ? "Turn back" : "Invert"}</button>
-        </div>
-      );
-    }
-    function KmToMiles() {
-      const [amount, setAmount] = React.useState(0);
-      const [inverted, setInverted] = React.useState(false);
-      const onChange = (event) => {
-        setAmount(event.target.value);
-      };
-      const reset = () => setAmount(0);
-      const onFlip = () => {
-        reset();
-        setInverted((current) => !current);
-      };
-      return (
-        <div>
-          <div>
-            <label htmlFor="km">Kilometers</label>
-            <input
-              value={inverted ? (amount * 1.60934).toFixed(2) : amount}
-              id="km"
-              placeholder="Km"
-              type="number"
-              onChange={onChange}
-              disabled={inverted}
-            />
-          </div>
-          <h4>
-            {inverted ? `${amount} Km to Miles ↑` : `${amount} Miles to Km ↓`}
-          </h4>
-          <div>
-            <label htmlFor="miles">Miles</label>
-            <input
-              value={inverted ? amount : (amount * 0.621371).toFixed(2)}
-              id="miles"
-              placeholder="Miles"
-              type="number"
-              onChange={onChange}
-              disabled={!inverted}
-            />
-          </div>
-          <button onClick={reset}>Reset</button>
-          <button onClick={onFlip}>{inverted ? "Turn back" : "Invert"}</button>
-        </div>
-      );
-    }
     function App() {
-      const [index, setIndex] = React.useState("xx");
-      const onSelect = (event) => {
-        setIndex(event.target.value);
-      };
-
+      const [value, setValue] = React.useState("Save Changes");
+      const changeValue = () => setValue("Revert Changes");
       return (
         <div>
-          <h1>Super Converter</h1>
-          <select value={index} onChange={onSelect}>
-            <option value="xx">Select your units</option>
-            <option value="0">Minutes & Hours</option>
-            <option value="1">Km & Miles</option>
-          </select>
-          <hr />
-          {index === "xx" ? "Please select your units" : null}
-          {index === "0" ? <MinutesToHours /> : null}
-          {index === "1" ? <KmToMiles /> : null}
+          <MemorizedBtn text={value} onClick={setValue()} />
+          <MemorizedBtn text="Continue" />
         </div>
       );
     }
